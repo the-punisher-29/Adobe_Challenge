@@ -3,128 +3,33 @@
   "outline": [
     {
       "level": "H1",
-      "text": "Overview",
-      "page": 1
-    },
-    {
-      "level": "H1",
-      "text": "Foundation Level Extensions",
-      "page": 1
-    },
-    {
-      "level": "H2",
-      "text": "International Software Testing Qualifications Board",
-      "page": 1
-    },
-    {
-      "level": "H5",
-      "text": "Overview",
-      "page": 2
-    },
-    {
-      "level": "H5",
-      "text": "Overview",
-      "page": 3
-    },
-    {
-      "level": "H3",
-      "text": "Revision History",
-      "page": 3
-    },
-    {
-      "level": "H3",
-      "text": "Date",
-      "page": 3
-    },
-    {
-      "level": "H3",
-      "text": "Remarks",
-      "page": 3
-    },
-    {
-      "level": "H3",
       "text": "18 JUNE 2013",
       "page": 3
     },
     {
-      "level": "H3",
+      "level": "H1",
       "text": "23 JULY 2013",
       "page": 3
     },
     {
-      "level": "H3",
+      "level": "H1",
       "text": "6 NOV 2013",
       "page": 3
     },
     {
-      "level": "H3",
+      "level": "H1",
       "text": "11 DEC 2013",
       "page": 3
     },
     {
-      "level": "H3",
+      "level": "H1",
       "text": "20 DEC 2013",
       "page": 3
     },
     {
-      "level": "H3",
+      "level": "H1",
       "text": "31 MAY 2014",
       "page": 3
-    },
-    {
-      "level": "H5",
-      "text": "Overview",
-      "page": 4
-    },
-    {
-      "level": "H3",
-      "text": "Table of Contents",
-      "page": 4
-    },
-    {
-      "level": "H3",
-      "text": "Revision History",
-      "page": 4
-    },
-    {
-      "level": "H3",
-      "text": "Agile Tester Syllabus",
-      "page": 4
-    },
-    {
-      "level": "H3",
-      "text": "References",
-      "page": 4
-    },
-    {
-      "level": "H5",
-      "text": "Overview",
-      "page": 5
-    },
-    {
-      "level": "H3",
-      "text": "Acknowledgements",
-      "page": 5
-    },
-    {
-      "level": "H5",
-      "text": "Overview",
-      "page": 6
-    },
-    {
-      "level": "H3",
-      "text": "Introduction to the Foundation Level Extensions",
-      "page": 6
-    },
-    {
-      "level": "H5",
-      "text": "Overview",
-      "page": 7
-    },
-    {
-      "level": "H3",
-      "text": "Introduction to Foundation Level Agile Tester Extension",
-      "page": 7
     },
     {
       "level": "H2",
@@ -133,18 +38,8 @@
     },
     {
       "level": "H2",
-      "text": "2.2 Career Paths for Testers",
-      "page": 7
-    },
-    {
-      "level": "H2",
       "text": "2.3 Learning Objectives",
       "page": 7
-    },
-    {
-      "level": "H5",
-      "text": "Overview",
-      "page": 8
     },
     {
       "level": "H2",
@@ -153,48 +48,8 @@
     },
     {
       "level": "H2",
-      "text": "2.5 Structure and Course Duration",
-      "page": 8
-    },
-    {
-      "level": "H3",
-      "text": "Syllabus",
-      "page": 8
-    },
-    {
-      "level": "H3",
-      "text": "Days",
-      "page": 8
-    },
-    {
-      "level": "H5",
-      "text": "Overview",
-      "page": 9
-    },
-    {
-      "level": "H2",
       "text": "2.6 Keeping It Current",
       "page": 9
-    },
-    {
-      "level": "H5",
-      "text": "Overview",
-      "page": 10
-    },
-    {
-      "level": "H3",
-      "text": "Overview of the Foundation Level Extension –",
-      "page": 10
-    },
-    {
-      "level": "H3",
-      "text": "Agile Tester",
-      "page": 10
-    },
-    {
-      "level": "H3",
-      "text": "Syllabus",
-      "page": 10
     },
     {
       "level": "H2",
@@ -207,53 +62,18 @@
       "page": 10
     },
     {
-      "level": "H3",
+      "level": "H1",
       "text": "Chapter 1: Agile Software Development",
       "page": 10
     },
     {
-      "level": "H5",
-      "text": "Overview",
-      "page": 11
-    },
-    {
-      "level": "H3",
-      "text": "Chapter 2: Fundamental Agile Testing Principles, Practices, and Processes",
-      "page": 11
-    },
-    {
-      "level": "H3",
+      "level": "H1",
       "text": "Chapter 3: Agile Testing Methods, Techniques, and Tools",
       "page": 11
     },
     {
-      "level": "H5",
-      "text": "Overview",
-      "page": 12
-    },
-    {
-      "level": "H3",
-      "text": "References",
-      "page": 12
-    },
-    {
-      "level": "H2",
-      "text": "4.1 Trademarks",
-      "page": 12
-    },
-    {
-      "level": "H2",
-      "text": "4.2 Documents and Web Sites",
-      "page": 12
-    },
-    {
-      "level": "H3",
-      "text": "Identifier",
-      "page": 12
-    },
-    {
-      "level": "H3",
-      "text": "Reference",
+      "level": "H1",
+      "text": "4. References",
       "page": 12
     }
   ]
