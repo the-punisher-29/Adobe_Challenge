@@ -7,57 +7,42 @@
       "page": 1
     },
     {
-      "level": "H1",
-      "text": "Foundation Level Extensions",
-      "page": 1
-    },
-    {
       "level": "H2",
-      "text": "International Software Testing Qualifications Board",
+      "text": "ISTQB",
       "page": 1
-    },
-    {
-      "level": "H5",
-      "text": "Overview",
-      "page": 2
-    },
-    {
-      "level": "H5",
-      "text": "Overview",
-      "page": 3
     },
     {
       "level": "H3",
+      "text": "ISTQB",
+      "page": 2
+    },
+    {
+      "level": "H3",
+      "text": "ISTQB",
+      "page": 3
+    },
+    {
+      "level": "H2",
       "text": "Revision History",
       "page": 3
     },
     {
-      "level": "H3",
-      "text": "Date",
-      "page": 3
-    },
-    {
-      "level": "H3",
-      "text": "Remarks",
-      "page": 3
-    },
-    {
-      "level": "H3",
+      "level": "H2",
       "text": "18 JUNE 2013",
       "page": 3
     },
     {
-      "level": "H3",
+      "level": "H2",
       "text": "23 JULY 2013",
       "page": 3
     },
     {
-      "level": "H3",
+      "level": "H2",
       "text": "6 NOV 2013",
       "page": 3
     },
     {
-      "level": "H3",
+      "level": "H2",
       "text": "11 DEC 2013",
       "page": 3
     },
@@ -67,68 +52,48 @@
       "page": 3
     },
     {
-      "level": "H3",
+      "level": "H2",
       "text": "31 MAY 2014",
       "page": 3
     },
     {
-      "level": "H5",
-      "text": "Overview",
+      "level": "H3",
+      "text": "ISTQB",
+      "page": 4
+    },
+    {
+      "level": "H2",
+      "text": "Intended Audience .....",
+      "page": 4
+    },
+    {
+      "level": "H2",
+      "text": "Keeping It Current..",
       "page": 4
     },
     {
       "level": "H3",
-      "text": "Table of Contents",
-      "page": 4
-    },
-    {
-      "level": "H3",
-      "text": "Revision History",
-      "page": 4
-    },
-    {
-      "level": "H3",
-      "text": "Agile Tester Syllabus",
-      "page": 4
-    },
-    {
-      "level": "H3",
-      "text": "References",
-      "page": 4
-    },
-    {
-      "level": "H5",
-      "text": "Overview",
+      "text": "ISTQB",
       "page": 5
     },
     {
-      "level": "H3",
+      "level": "H2",
       "text": "Acknowledgements",
       "page": 5
     },
     {
-      "level": "H5",
-      "text": "Overview",
+      "level": "H3",
+      "text": "ISTQB",
       "page": 6
     },
     {
       "level": "H3",
-      "text": "Introduction to the Foundation Level Extensions",
-      "page": 6
-    },
-    {
-      "level": "H5",
-      "text": "Overview",
-      "page": 7
-    },
-    {
-      "level": "H3",
-      "text": "Introduction to Foundation Level Agile Tester Extension",
+      "text": "ISTQB",
       "page": 7
     },
     {
       "level": "H2",
-      "text": "2.1 Intended Audience",
+      "text": "2. Introduction to Foundation Level Agile Tester Extension",
       "page": 7
     },
     {
@@ -142,33 +107,53 @@
       "page": 7
     },
     {
-      "level": "H5",
-      "text": "Overview",
+      "level": "H3",
+      "text": "Baseline: Foundation",
       "page": 8
     },
     {
       "level": "H2",
-      "text": "2.4 Entry Requirements",
+      "text": "Extension: Agile Tester",
       "page": 8
     },
     {
       "level": "H2",
-      "text": "2.5 Structure and Course Duration",
+      "text": "EXPERT",
       "page": 8
     },
     {
       "level": "H3",
-      "text": "Syllabus",
+      "text": "CTEL",
+      "page": 8
+    },
+    {
+      "level": "H2",
+      "text": "ISTQB Glossary",
       "page": 8
     },
     {
       "level": "H3",
-      "text": "Days",
+      "text": "ADVANCED",
       "page": 8
     },
     {
-      "level": "H5",
-      "text": "Overview",
+      "level": "H2",
+      "text": "CTAL",
+      "page": 8
+    },
+    {
+      "level": "H2",
+      "text": "FOUNDATION",
+      "page": 8
+    },
+    {
+      "level": "H2",
+      "text": "CTFL",
+      "page": 8
+    },
+    {
+      "level": "H3",
+      "text": "ISTQB",
       "page": 9
     },
     {
@@ -177,22 +162,12 @@
       "page": 9
     },
     {
-      "level": "H5",
-      "text": "Overview",
+      "level": "H3",
+      "text": "ISTQB",
       "page": 10
     },
     {
-      "level": "H3",
-      "text": "Overview of the Foundation Level Extension –",
-      "page": 10
-    },
-    {
-      "level": "H3",
-      "text": "Agile Tester",
-      "page": 10
-    },
-    {
-      "level": "H3",
+      "level": "H2",
       "text": "Syllabus",
       "page": 10
     },
@@ -207,53 +182,33 @@
       "page": 10
     },
     {
-      "level": "H3",
+      "level": "H2",
       "text": "Chapter 1: Agile Software Development",
       "page": 10
     },
     {
-      "level": "H5",
-      "text": "Overview",
+      "level": "H3",
+      "text": "ISTQB",
       "page": 11
     },
     {
-      "level": "H3",
-      "text": "Chapter 2: Fundamental Agile Testing Principles, Practices, and Processes",
-      "page": 11
-    },
-    {
-      "level": "H3",
+      "level": "H2",
       "text": "Chapter 3: Agile Testing Methods, Techniques, and Tools",
       "page": 11
     },
     {
-      "level": "H5",
-      "text": "Overview",
-      "page": 12
-    },
-    {
       "level": "H3",
-      "text": "References",
+      "text": "ISTQB",
       "page": 12
     },
     {
       "level": "H2",
-      "text": "4.1 Trademarks",
+      "text": "4. References",
       "page": 12
     },
     {
       "level": "H2",
-      "text": "4.2 Documents and Web Sites",
-      "page": 12
-    },
-    {
-      "level": "H3",
-      "text": "Identifier",
-      "page": 12
-    },
-    {
-      "level": "H3",
-      "text": "Reference",
+      "text": "[ISTQB-Web]",
       "page": 12
     }
   ]
