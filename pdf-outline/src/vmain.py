@@ -29,8 +29,9 @@ class HeadingClassifier:
 
 class PDFOutlineExtractor:
     def __init__(self):
-        self.input_dir = Path(f"{base_dir}/input-dir")
+        self.input_dir = Path(f"{base_dir}/input")
         self.output_dir = Path(f"{base_dir}/output")
+        # self.heading_classifier = HeadingClassifier()
         self.ocr = PaddleOCR(use_angle_cls=True, lang='en')
         if not self.output_dir.exists():
             self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -102,7 +103,7 @@ class PDFOutlineExtractor:
         # Heuristic patterns
         is_all_caps = text.isupper() and len(text) > 3
         is_title_case = text.istitle()
-        has_colon = ':' in text and len(text) < 80
+        has_colon = ':' in text and len(text) < 100
         is_centered = (x1 > 400 and x2 < 1600)  # Rough guess based on your bbox ranges
 
         has_numbering = re.match(r'^\d+\.?\s+', text) or re.match(r'^\d+\.\d+\.?\s+', text)
@@ -247,8 +248,6 @@ class PDFOutlineExtractor:
         return {page: sum(hs)/len(hs) for page, hs in page_heights.items()}
         
     def _extract_headings(self, all_spans, avg_font_size, common_fonts):
-        """Extract hierarchical headings from all spans"""
-        # Filter potential headings
         heading_candidates = []
 
         avg_height_by_page = self.compute_avg_height_by_page(all_spans)
@@ -256,65 +255,47 @@ class PDFOutlineExtractor:
             avg_height = avg_height_by_page[span["page"]]
             if self.is_likely_heading_no_fonts(span, avg_height):
                 heading_candidates.append(span)
-        # for span in all_spans:
-        #     if self.is_likely_heading(span, avg_font_size, common_fonts):
-        #         heading_candidates.append(span)
-        
+
         if not heading_candidates:
             return []
-        
-        # Remove duplicates (same text on same page)
-        unique_headings = []
+
         seen = set()
-        
+        unique_headings = []
         for heading in heading_candidates:
             key = (heading["text"], heading["page"])
             if key not in seen:
                 seen.add(key)
                 unique_headings.append(heading)
-        
-        # Sort by page and then by y-position
+
+        # Sort by page and top position
         unique_headings.sort(key=lambda x: (x["page"], x["bbox"][1]))
-        
-        # Determine hierarchy based on font size and text patterns
+
+        # Assign hierarchy using heuristics
         outline = []
-        
-        # Group headings by font size
-        size_groups = defaultdict(list)
-        for heading in unique_headings:
-            size_groups[heading["size"]].append(heading)
-        
-        # Sort sizes in descending order
-        sorted_sizes = sorted(size_groups.keys(), reverse=True)
-        
-        # Create size to level mapping
-        size_to_level = {}
-        level_names = ["H1", "H2", "H3", "H4", "H5"]
-        
-        for i, size in enumerate(sorted_sizes[:len(level_names)]):
-            size_to_level[size] = level_names[i]
-        
-        # Process headings and assign levels
+        last_y = None
+        current_level = "H1"
+
         for heading in unique_headings:
             text = heading["text"]
-            
-            # Determine level based on font size
-            level = size_to_level.get(heading["size"], "H3")
-            
-            # Override level based on text patterns
-            if re.match(r'^\d+\.\s+', text):  # "1. Introduction"
+            y = heading["bbox"][1]
+
+            if last_y is None:
                 level = "H1"
-            elif re.match(r'^\d+\.\d+\s+', text):  # "1.1 Overview"
-                level = "H2"
-            elif re.match(r'^\d+\.\d+\.\d+\s+', text):  # "1.1.1 Details"
-                level = "H3"
-            
+            else:
+                dy = y - last_y
+                if dy > 50:
+                    level = "H2"
+                else:
+                    level = "H3"
+
             outline.append({
                 "level": level,
                 "text": text,
                 "page": heading["page"]
             })
-        
+
+            last_y = y
+
         return outline
 
     def process_all_pdfs(self):

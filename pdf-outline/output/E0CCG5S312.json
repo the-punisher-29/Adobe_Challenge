@@ -3,37 +3,102 @@
   "outline": [
     {
       "level": "H1",
-      "text": "18 JUNE 2013",
-      "page": 3
+      "text": "Overview",
+      "page": 1
     },
     {
-      "level": "H1",
-      "text": "23 JULY 2013",
-      "page": 3
+      "level": "H2",
+      "text": "ISTQB",
+      "page": 1
     },
     {
-      "level": "H1",
-      "text": "6 NOV 2013",
-      "page": 3
+      "level": "H3",
+      "text": "ISTQB",
+      "page": 2
     },
     {
-      "level": "H1",
-      "text": "11 DEC 2013",
-      "page": 3
-    },
-    {
-      "level": "H1",
-      "text": "20 DEC 2013",
-      "page": 3
-    },
-    {
-      "level": "H1",
-      "text": "31 MAY 2014",
+      "level": "H3",
+      "text": "ISTQB",
       "page": 3
     },
     {
       "level": "H2",
-      "text": "2.1 Intended Audience",
+      "text": "Revision History",
+      "page": 3
+    },
+    {
+      "level": "H2",
+      "text": "18 JUNE 2013",
+      "page": 3
+    },
+    {
+      "level": "H2",
+      "text": "23 JULY 2013",
+      "page": 3
+    },
+    {
+      "level": "H2",
+      "text": "6 NOV 2013",
+      "page": 3
+    },
+    {
+      "level": "H2",
+      "text": "11 DEC 2013",
+      "page": 3
+    },
+    {
+      "level": "H3",
+      "text": "20 DEC 2013",
+      "page": 3
+    },
+    {
+      "level": "H2",
+      "text": "31 MAY 2014",
+      "page": 3
+    },
+    {
+      "level": "H3",
+      "text": "ISTQB",
+      "page": 4
+    },
+    {
+      "level": "H2",
+      "text": "Intended Audience .....",
+      "page": 4
+    },
+    {
+      "level": "H2",
+      "text": "Keeping It Current..",
+      "page": 4
+    },
+    {
+      "level": "H3",
+      "text": "ISTQB",
+      "page": 5
+    },
+    {
+      "level": "H2",
+      "text": "Acknowledgements",
+      "page": 5
+    },
+    {
+      "level": "H3",
+      "text": "ISTQB",
+      "page": 6
+    },
+    {
+      "level": "H3",
+      "text": "ISTQB",
+      "page": 7
+    },
+    {
+      "level": "H2",
+      "text": "2. Introduction to Foundation Level Agile Tester Extension",
+      "page": 7
+    },
+    {
+      "level": "H2",
+      "text": "2.2 Career Paths for Testers",
       "page": 7
     },
     {
@@ -42,14 +107,69 @@
       "page": 7
     },
     {
-      "level": "H2",
-      "text": "2.4 Entry Requirements",
+      "level": "H3",
+      "text": "Baseline: Foundation",
       "page": 8
+    },
+    {
+      "level": "H2",
+      "text": "Extension: Agile Tester",
+      "page": 8
+    },
+    {
+      "level": "H2",
+      "text": "EXPERT",
+      "page": 8
+    },
+    {
+      "level": "H3",
+      "text": "CTEL",
+      "page": 8
+    },
+    {
+      "level": "H2",
+      "text": "ISTQB Glossary",
+      "page": 8
+    },
+    {
+      "level": "H3",
+      "text": "ADVANCED",
+      "page": 8
+    },
+    {
+      "level": "H2",
+      "text": "CTAL",
+      "page": 8
+    },
+    {
+      "level": "H2",
+      "text": "FOUNDATION",
+      "page": 8
+    },
+    {
+      "level": "H2",
+      "text": "CTFL",
+      "page": 8
+    },
+    {
+      "level": "H3",
+      "text": "ISTQB",
+      "page": 9
     },
     {
       "level": "H2",
       "text": "2.6 Keeping It Current",
       "page": 9
+    },
+    {
+      "level": "H3",
+      "text": "ISTQB",
+      "page": 10
+    },
+    {
+      "level": "H2",
+      "text": "Syllabus",
+      "page": 10
     },
     {
       "level": "H2",
@@ -62,18 +182,33 @@
       "page": 10
     },
     {
-      "level": "H1",
+      "level": "H2",
       "text": "Chapter 1: Agile Software Development",
       "page": 10
     },
     {
-      "level": "H1",
+      "level": "H3",
+      "text": "ISTQB",
+      "page": 11
+    },
+    {
+      "level": "H2",
       "text": "Chapter 3: Agile Testing Methods, Techniques, and Tools",
       "page": 11
     },
     {
-      "level": "H1",
+      "level": "H3",
+      "text": "ISTQB",
+      "page": 12
+    },
+    {
+      "level": "H2",
       "text": "4. References",
+      "page": 12
+    },
+    {
+      "level": "H2",
+      "text": "[ISTQB-Web]",
       "page": 12
     }
   ]
