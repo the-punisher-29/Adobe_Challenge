@@ -1,0 +1,6 @@
+fitz==0.0.1.dev2
+paddleocr==2.8.0
+paddleocr.egg==info
+pdf2image==1.17.0
+torch==2.1.0+cpu
+transformers==4.53.2
