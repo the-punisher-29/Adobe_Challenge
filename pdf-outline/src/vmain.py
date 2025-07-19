@@ -29,7 +29,7 @@ class HeadingClassifier:
 
 class PDFOutlineExtractor:
     def __init__(self):
-        self.input_dir = Path(f"{base_dir}/input")
+        self.input_dir = Path(f"{base_dir}/input-dir")
         self.output_dir = Path(f"{base_dir}/output")
         self.ocr = PaddleOCR(use_angle_cls=True, lang='en')
         if not self.output_dir.exists():
@@ -73,6 +73,8 @@ class PDFOutlineExtractor:
 
             page_texts[page_num] = page_spans
         doc.close()
+        print("All Spans: ", all_spans)
+        print("Page Text: ", page_texts)
         return all_spans, page_texts
 
     def clean_text(self, text):
@@ -81,6 +83,52 @@ class PDFOutlineExtractor:
         text = re.sub(r'\s+', ' ', text.strip())
         text = re.sub(r'[^\w\s\-\.\(\)\[\]\{\}:;,\u2013\u2014\u2019\u201c\u201d]', '', text)
         return text
+    
+    def is_likely_heading_no_fonts(self, span, avg_height):
+        text = span["text"].strip()
+
+        # Filter out junk or decorative text
+        if not text or len(text) < 3:
+            return False
+        if re.match(r'^[\d\s\.\-\(\)]+$', text):  # Only digits and punctuation
+            return False
+
+        # Check vertical size (height = y2 - y1)
+        x1, y1, x2, y2 = span["bbox"]
+        height = y2 - y1
+        is_larger = height > avg_height * 1.1
+        is_much_larger = height > avg_height * 1.3
+
+        # Heuristic patterns
+        is_all_caps = text.isupper() and len(text) > 3
+        is_title_case = text.istitle()
+        has_colon = ':' in text and len(text) < 80
+        is_centered = (x1 > 400 and x2 < 1600)  # Rough guess based on your bbox ranges
+
+        has_numbering = re.match(r'^\d+\.?\s+', text) or re.match(r'^\d+\.\d+\.?\s+', text)
+
+        # Score weights
+        score = 0
+        if is_larger:
+            score += 1
+        if is_much_larger:
+            score += 2
+        if has_colon:
+            score += 1
+        if is_all_caps:
+            score += 2
+        if is_title_case:
+            score += 1
+        if has_numbering:
+            score += 1
+        if is_centered:
+            score += 1
+
+        # Strong signals
+        if re.match(r'^(chapter|section|part|appendix)\s+\d+', text.lower()):
+            score += 2
+
+        return score >= 3
 
     def is_likely_heading(self, span, avg_font_size, common_fonts):
         text = span["text"].strip()
@@ -187,15 +235,30 @@ class PDFOutlineExtractor:
             return self.clean_text(main_title)
         
         return "Untitled Document"
+    
+    from collections import defaultdict
+
+    def compute_avg_height_by_page(self, spans):
+        page_heights = defaultdict(list)
+        for s in spans:
+            height = s["bbox"][3] - s["bbox"][1]
+            page_heights[s["page"]].append(height)
+
+        return {page: sum(hs)/len(hs) for page, hs in page_heights.items()}
         
     def _extract_headings(self, all_spans, avg_font_size, common_fonts):
         """Extract hierarchical headings from all spans"""
         # Filter potential headings
         heading_candidates = []
-        
+
+        avg_height_by_page = self.compute_avg_height_by_page(all_spans)
         for span in all_spans:
-            if self.is_likely_heading(span, avg_font_size, common_fonts):
+            avg_height = avg_height_by_page[span["page"]]
+            if self.is_likely_heading_no_fonts(span, avg_height):
                 heading_candidates.append(span)
+        # for span in all_spans:
+        #     if self.is_likely_heading(span, avg_font_size, common_fonts):
+        #         heading_candidates.append(span)
         
         if not heading_candidates:
             return []
