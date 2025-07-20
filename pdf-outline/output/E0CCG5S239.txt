@@ -1,0 +1,28 @@
+===== Page_0 =====
+Application form for grant of LTC advance 
+|1.|Name of the Government Servant|None||None|None|
+|2.|Designation|None||None|None|
+|3.|Date of entering the Central Government Service|None||None|None|
+|4.|PAY + SI + NPA|None||None|None|
+|5.|Whether permanent or temporary|None||None|None|
+|6.|Home Town as recorded in the Service Book|None||None|None|
+|7.|Whether wife / husband is employed and if so whether entitled to LTC|None||None|None|
+|8.|Whether the concession is to be availed for visiting home town and if so block for which LTC is to be availed.|None||None|None|
+|9.|(a) If the concession is to visit anywhere in India, the place to be visited. (b) Block for which to be availed.|None||None|None|
+|10.|Single rail fare/bus fare from the headquarters to home town/place of visit by shortest route.|None||None|None|
+|11.|Persons in respect of whom LTC is proposed to be availed.|None|None|None|None|
+|None|S.No|Name|None|Age|Relationship|
+|None|1.||None|||
+|None|2.||None|||
+|None|3.||None|||
+|None|4.||None|||
+|None|5.||None|||
+|None|6.||None|||
+|12.|Amount of advance required.|None|Rs.|None|None|I  declare  that  the  particulars  furnished  above  are  true  and  correct  to  the  best  of  my  knowledge. 
+  I 
+undertake to produce the tickets for the outward journey within ten days of receipt of the advance. 
+In  the  event  of  cancellation  of  the  journey  or  if  I  fail  to  produce  the  tickets  within  ten  days  of  receipt of 
+advance, I undertake to refund the entire advance in one lump sum. 
+Date 
+Signature of Government Servant. 
+
