@@ -1,0 +1,2016 @@
+{
+  "font_statistics": {
+    "avg_size": 11.68,
+    "median_size": 12.4,
+    "max_size": 19.2,
+    "min_size": 7.2,
+    "size_std": 4.9428736581061825,
+    "common_fonts": [
+      [
+        "Helvetica",
+        4
+      ],
+      [
+        "Times-Roman",
+        1
+      ]
+    ]
+  },
+  "elements": [
+    {
+      "text": "ADDRESS:",
+      "word_count": 1,
+      "char_count": 9,
+      "dominant_font_size": 12.4,
+      "dominant_font_name": "Helvetica",
+      "bold_ratio": 0.0,
+      "is_mostly_bold": false,
+      "bbox": [
+        32.6488,
+        225.8587583,
+        104.44306299999998,
+        238.2618583
+      ],
+      "font_details": [
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "D",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "D",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "R",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "S",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "S",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": ":",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        }
+      ],
+      "page": 1
+    },
+    {
+      "text": "TOPJUMP \n3735 PARKWAY \nPIGEON  FORGE, TN  37863 \n(NEAR DIXIE STAMPEDE ON  THE  PARKWAY)",
+      "word_count": 13,
+      "char_count": 81,
+      "dominant_font_size": 12.4,
+      "dominant_font_name": "Helvetica",
+      "bold_ratio": 0.09876543209876543,
+      "is_mostly_bold": false,
+      "bbox": [
+        58.3879,
+        173.1868239,
+        270.65551942,
+        224.0984583
+      ],
+      "font_details": [
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "O",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "P",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "J",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "U",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "M",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "P",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "3",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "7",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "3",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "5",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 12.4,
+          "char": "P",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 12.4,
+          "char": "A",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 12.4,
+          "char": "R",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 12.4,
+          "char": "K",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 12.4,
+          "char": "W",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 12.4,
+          "char": "A",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 12.4,
+          "char": "Y",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 12.4,
+          "char": " ",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "P",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "I",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "G",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "O",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "N",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "F",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "O",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "R",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "G",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": ",",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "N",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "3",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "7",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "8",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "6",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": "3",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 12.4,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "(",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "N",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "R",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "D",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "I",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "X",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "I",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "S",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "M",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "P",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "D",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "O",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "N",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "H",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "P",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "R",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "K",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "W",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": "Y",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": ")",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 9.4,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        }
+      ],
+      "page": 1
+    },
+    {
+      "text": "RSVP: ----------------",
+      "word_count": 2,
+      "char_count": 22,
+      "dominant_font_size": 19.2,
+      "dominant_font_name": "Times-Roman",
+      "bold_ratio": 0.2727272727272727,
+      "is_mostly_bold": false,
+      "bbox": [
+        29.489,
+        138.07755840000002,
+        296.828489,
+        159.2724583
+      ],
+      "font_details": [
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 12.4,
+          "char": "R",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 12.4,
+          "char": "S",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 12.4,
+          "char": "V",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 12.4,
+          "char": "P",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 12.4,
+          "char": ":",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 12.4,
+          "char": " ",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Times-Roman",
+          "size": 19.2,
+          "char": "-",
+          "bold": false,
+          "italic": false
+        }
+      ],
+      "page": 1
+    },
+    {
+      "text": "CLOSED TOED SHOES ARE REQUIRED FOR CLIMBING",
+      "word_count": 7,
+      "char_count": 44,
+      "dominant_font_size": 7.2,
+      "dominant_font_name": "Helvetica",
+      "bold_ratio": 0.0,
+      "is_mostly_bold": false,
+      "bbox": [
+        62.2978,
+        121.0594274,
+        266.21985042,
+        128.2612274
+      ],
+      "font_details": [
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "C",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "L",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "O",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "S",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "D",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "O",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "D",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "S",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "H",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "O",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "S",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "R",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "R",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "Q",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "U",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "I",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "R",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "D",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "F",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "O",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "R",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "C",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "L",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "I",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "M",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "B",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "I",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "N",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "G",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        }
+      ],
+      "page": 1
+    },
+    {
+      "text": "PARENTS OR GUARDIANS NOT ATTENDING THE  PARTY, \nPLEASE VISIT TOPJUMP.COM TO  FILL OUT WAIVER \nSO YOUR CHILD CAN ATTEND.",
+      "word_count": 19,
+      "char_count": 116,
+      "dominant_font_size": 7.2,
+      "dominant_font_name": "Helvetica",
+      "bold_ratio": 0.10344827586206896,
+      "is_mostly_bold": false,
+      "bbox": [
+        59.605739700000015,
+        86.7309274,
+        268.7083288,
+        112.179608
+      ],
+      "font_details": [
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "P",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "R",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "N",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "S",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "O",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "R",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "G",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "U",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "R",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "D",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "I",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "N",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "S",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "N",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "O",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "N",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "D",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "I",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "N",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "G",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "H",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "P",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "R",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "Y",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": ",",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "P",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "L",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "S",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "V",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "I",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "S",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "I",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 7.2,
+          "char": "T",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 7.2,
+          "char": "O",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 7.2,
+          "char": "P",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 7.2,
+          "char": "J",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 7.2,
+          "char": "U",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 7.2,
+          "char": "M",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 7.2,
+          "char": "P",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 7.2,
+          "char": ".",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 7.2,
+          "char": "C",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 7.2,
+          "char": "O",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 7.2,
+          "char": "M",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica-Bold",
+          "size": 7.2,
+          "char": " ",
+          "bold": true,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "O",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "F",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "I",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "L",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "L",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "O",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "U",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "W",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "I",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "V",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "R",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "S",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "O",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "Y",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "O",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "U",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "R",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "C",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "H",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "I",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "L",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "D",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "C",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "N",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "A",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "T",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "E",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "N",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": "D",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": ".",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "Helvetica",
+          "size": 7.2,
+          "char": " ",
+          "bold": false,
+          "italic": false
+        }
+      ],
+      "page": 1
+    }
+  ],
+  "total_elements": 5
+}

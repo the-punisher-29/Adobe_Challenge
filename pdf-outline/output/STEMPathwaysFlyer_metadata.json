@@ -1,0 +1,78 @@
+{
+  "font_statistics": {
+    "avg_size": 14.01,
+    "median_size": 14.01,
+    "max_size": 14.01,
+    "min_size": 14.01,
+    "size_std": 0,
+    "common_fonts": [
+      [
+        "MUFUZY+Sniglet-Regular",
+        1
+      ]
+    ]
+  },
+  "elements": [
+    {
+      "text": "Goals:",
+      "word_count": 1,
+      "char_count": 6,
+      "dominant_font_size": 14.01,
+      "dominant_font_name": "MUFUZY+Sniglet-Regular",
+      "bold_ratio": 0.0,
+      "is_mostly_bold": false,
+      "bbox": [
+        45.4123,
+        591.9174908922,
+        82.1082880738,
+        605.9289410922
+      ],
+      "font_details": [
+        {
+          "fontname": "MUFUZY+Sniglet-Regular",
+          "size": 14.01,
+          "char": "G",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "MUFUZY+Sniglet-Regular",
+          "size": 14.01,
+          "char": "o",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "MUFUZY+Sniglet-Regular",
+          "size": 14.01,
+          "char": "a",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "MUFUZY+Sniglet-Regular",
+          "size": 14.01,
+          "char": "l",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "MUFUZY+Sniglet-Regular",
+          "size": 14.01,
+          "char": "s",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "fontname": "MUFUZY+Sniglet-Regular",
+          "size": 14.01,
+          "char": ":",
+          "bold": false,
+          "italic": false
+        }
+      ],
+      "page": 1
+    }
+  ],
+  "total_elements": 1
+}
