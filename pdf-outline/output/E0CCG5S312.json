@@ -1,25 +1,10 @@
 {
-  "title": "Overview",
+  "title": "Foundation Level Extensions",
   "outline": [
     {
       "level": "H1",
-      "text": "Overview",
+      "text": "International Software Testing Qualifications Board",
       "page": 1
-    },
-    {
-      "level": "H2",
-      "text": "ISTQB",
-      "page": 1
-    },
-    {
-      "level": "H3",
-      "text": "ISTQB",
-      "page": 2
-    },
-    {
-      "level": "H3",
-      "text": "ISTQB",
-      "page": 3
     },
     {
       "level": "H2",
@@ -28,53 +13,8 @@
     },
     {
       "level": "H2",
-      "text": "18 JUNE 2013",
-      "page": 3
-    },
-    {
-      "level": "H2",
-      "text": "23 JULY 2013",
-      "page": 3
-    },
-    {
-      "level": "H2",
-      "text": "6 NOV 2013",
-      "page": 3
-    },
-    {
-      "level": "H2",
-      "text": "11 DEC 2013",
-      "page": 3
-    },
-    {
-      "level": "H3",
-      "text": "20 DEC 2013",
-      "page": 3
-    },
-    {
-      "level": "H2",
-      "text": "31 MAY 2014",
-      "page": 3
-    },
-    {
-      "level": "H3",
-      "text": "ISTQB",
+      "text": "Table of Contents",
       "page": 4
-    },
-    {
-      "level": "H2",
-      "text": "Intended Audience .....",
-      "page": 4
-    },
-    {
-      "level": "H2",
-      "text": "Keeping It Current..",
-      "page": 4
-    },
-    {
-      "level": "H3",
-      "text": "ISTQB",
-      "page": 5
     },
     {
       "level": "H2",
@@ -82,88 +22,53 @@
       "page": 5
     },
     {
-      "level": "H3",
-      "text": "ISTQB",
+      "level": "H2",
+      "text": "Foundation Level Extension -- Agile Tester",
       "page": 6
     },
     {
+      "level": "H2",
+      "text": "Foundation Level Extension -- Agile Tester",
+      "page": 7
+    },
+    {
       "level": "H3",
-      "text": "ISTQB",
+      "text": "2.1 Intended Audience",
       "page": 7
     },
     {
-      "level": "H2",
-      "text": "2. Introduction to Foundation Level Agile Tester Extension",
-      "page": 7
-    },
-    {
-      "level": "H2",
+      "level": "H3",
       "text": "2.2 Career Paths for Testers",
       "page": 7
     },
     {
-      "level": "H2",
-      "text": "2.3 Learning Objectives",
+      "level": "H3",
+      "text": "3. Professionals who are relatively new to testing and are required to implement test approaches, environment.",
       "page": 7
     },
     {
       "level": "H3",
-      "text": "Baseline: Foundation",
-      "page": 8
-    },
-    {
-      "level": "H2",
-      "text": "Extension: Agile Tester",
-      "page": 8
-    },
-    {
-      "level": "H2",
-      "text": "EXPERT",
+      "text": "2.4 Entry Requirements",
       "page": 8
     },
     {
       "level": "H3",
-      "text": "CTEL",
-      "page": 8
-    },
-    {
-      "level": "H2",
-      "text": "ISTQB Glossary",
+      "text": "2.5 Structure and Course Duration",
       "page": 8
     },
     {
       "level": "H3",
-      "text": "ADVANCED",
-      "page": 8
-    },
-    {
-      "level": "H2",
-      "text": "CTAL",
-      "page": 8
-    },
-    {
-      "level": "H2",
-      "text": "FOUNDATION",
-      "page": 8
-    },
-    {
-      "level": "H2",
-      "text": "CTFL",
-      "page": 8
-    },
-    {
-      "level": "H3",
-      "text": "ISTQB",
-      "page": 9
-    },
-    {
-      "level": "H2",
       "text": "2.6 Keeping It Current",
       "page": 9
     },
     {
-      "level": "H3",
-      "text": "ISTQB",
+      "level": "H2",
+      "text": "Foundation Level Extension -- Agile Tester",
+      "page": 10
+    },
+    {
+      "level": "H2",
+      "text": "Agile Tester",
       "page": 10
     },
     {
@@ -172,43 +77,28 @@
       "page": 10
     },
     {
-      "level": "H2",
+      "level": "H3",
       "text": "3.1 Business Outcomes",
       "page": 10
     },
     {
-      "level": "H2",
+      "level": "H3",
       "text": "3.2 Content",
       "page": 10
     },
     {
       "level": "H2",
-      "text": "Chapter 1: Agile Software Development",
-      "page": 10
-    },
-    {
-      "level": "H3",
-      "text": "ISTQB",
-      "page": 11
-    },
-    {
-      "level": "H2",
-      "text": "Chapter 3: Agile Testing Methods, Techniques, and Tools",
-      "page": 11
-    },
-    {
-      "level": "H3",
-      "text": "ISTQB",
+      "text": "References",
       "page": 12
     },
     {
-      "level": "H2",
-      "text": "4. References",
+      "level": "H3",
+      "text": "4.1 Trademarks",
       "page": 12
     },
     {
-      "level": "H2",
-      "text": "[ISTQB-Web]",
+      "level": "H3",
+      "text": "4.2 Documents and Web Sites",
       "page": 12
     }
   ]
