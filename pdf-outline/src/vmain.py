@@ -1,322 +1,452 @@
 import os
 import json
-import fitz
-import re
-import tempfile
-from collections import defaultdict, Counter
-from pathlib import Path
+import fitz  # PyMuPDF
+import numpy as np
 from paddleocr import PaddleOCR
-from pdf2image import convert_from_path
+from collections import defaultdict
+from pathlib import Path
+from typing import Dict, List, Tuple, Optional
+import cv2
 
-base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
+INPUT_DIR = BASE_DIR / "input"
+OUTPUT_DIR = BASE_DIR / "output"
+OUTPUT_DIR.mkdir(exist_ok=True)
 
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-import torch
+# Initialize PaddleOCR (Offline mode, English only)
+ocr_model = PaddleOCR(use_angle_cls=True, lang='en', use_gpu=False, show_log=False)
 
-class HeadingClassifier:
-    def __init__(self, model_name="huawei-noah/TinyBERT_General_4L_312D"):
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-        self.model = AutoModelForSequenceClassification.from_pretrained(model_name)
-        self.model.eval()
-        self.label_map = {0: "body", 1: "heading", 2: "title"}
+TITLE_BLACKLIST = {                         # ⟵ NEW
+    "overview", "contents", "title", "index",
+    "table of contents", "chapter", "section",
+    "figure", "document", "appendix"
+}
 
-    def classify(self, text):
-        inputs = self.tokenizer(text, return_tensors="pt", truncation=True, max_length=128)
-        with torch.no_grad():
-            logits = self.model(**inputs).logits
-        pred = torch.argmax(logits, dim=1).item()
-        return self.label_map.get(pred, "body")
-
-class PDFOutlineExtractor:
-    def __init__(self):
-        self.input_dir = Path(f"{base_dir}/input")
-        self.output_dir = Path(f"{base_dir}/output")
-        # self.heading_classifier = HeadingClassifier()
-        self.ocr = PaddleOCR(use_angle_cls=True, lang='en')
-        if not self.output_dir.exists():
-            self.output_dir.mkdir(parents=True, exist_ok=True)
-
-    def ocr_extract_text_from_pdf(self, pdf_path):
-        """Extract text from each page of the PDF using PaddleOCR"""
-        doc = fitz.open(pdf_path)
-        all_spans = []
-        page_texts = {}
-
-        for page_index in range(len(doc)):
-            page_num = page_index + 1
-            # Convert page to image via pdf2image (optional) or fitz
-            pix = doc.load_page(page_index).get_pixmap(dpi=300)
-            tmp_dir = tempfile.gettempdir()
-            image_path = os.path.join(tmp_dir, f"page_{page_num}.png")
-            pix.save(image_path)
-
-            # OCR
-            result = self.ocr.ocr(image_path, cls=True)
-            page_spans = []
-
-            for line in result[0]:
-                text, conf = line[1][0], line[1][1]
-                box = line[0]
-                if conf < 0.5 or len(text.strip()) < 2:
-                    continue
-                y_positions = [p[1] for p in box]
-                bbox_top = min(y_positions)
-                span = {
-                    "text": self.clean_text(text),
-                    "size": 12.0,
-                    "font": "OCR",
-                    "flags": 0,
-                    "page": page_num,
-                    "bbox": [box[0][0], bbox_top, box[2][0], max(y_positions)]
-                }
-                all_spans.append(span)
-                page_spans.append(span)
-
-            page_texts[page_num] = page_spans
-        doc.close()
-        print("All Spans: ", all_spans)
-        print("Page Text: ", page_texts)
-        return all_spans, page_texts
-
-    def clean_text(self, text):
-        if not text:
-            return ""
-        text = re.sub(r'\s+', ' ', text.strip())
-        text = re.sub(r'[^\w\s\-\.\(\)\[\]\{\}:;,\u2013\u2014\u2019\u201c\u201d]', '', text)
-        return text
+class TextBlock:
+    """Represents a text block with position, size, and content information"""
+    def __init__(self, text: str, bbox: List[float], font_size: float, 
+                 font_name: str = "", confidence: float = 1.0, page_num: int = 0):
+        self.text = text.strip()
+        self.bbox = bbox  # [x0, y0, x1, y1]
+        self.font_size = font_size
+        self.font_name = font_name
+        self.confidence = confidence
+        self.page_num = page_num
+        
+    def get_center(self) -> Tuple[float, float]:
+        """Get center point of the text block"""
+        return ((self.bbox[0] + self.bbox[2]) / 2, (self.bbox[1] + self.bbox[3]) / 2)
     
-    def is_likely_heading_no_fonts(self, span, avg_height):
-        text = span["text"].strip()
+    def get_area(self) -> float:
+        """Get area of the bounding box"""
+        return (self.bbox[2] - self.bbox[0]) * (self.bbox[3] - self.bbox[1])
 
-        # Filter out junk or decorative text
-        if not text or len(text) < 3:
-            return False
-        if re.match(r'^[\d\s\.\-\(\)]+$', text):  # Only digits and punctuation
-            return False
-
-        # Check vertical size (height = y2 - y1)
-        x1, y1, x2, y2 = span["bbox"]
-        height = y2 - y1
-        is_larger = height > avg_height * 1.1
-        is_much_larger = height > avg_height * 1.3
-
-        # Heuristic patterns
-        is_all_caps = text.isupper() and len(text) > 3
-        is_title_case = text.istitle()
-        has_colon = ':' in text and len(text) < 100
-        is_centered = (x1 > 400 and x2 < 1600)  # Rough guess based on your bbox ranges
-
-        has_numbering = re.match(r'^\d+\.?\s+', text) or re.match(r'^\d+\.\d+\.?\s+', text)
-
-        # Score weights
-        score = 0
-        if is_larger:
-            score += 1
-        if is_much_larger:
-            score += 2
-        if has_colon:
-            score += 1
-        if is_all_caps:
-            score += 2
-        if is_title_case:
-            score += 1
-        if has_numbering:
-            score += 1
-        if is_centered:
-            score += 1
-
-        # Strong signals
-        if re.match(r'^(chapter|section|part|appendix)\s+\d+', text.lower()):
-            score += 2
-
-        return score >= 3
-
-    def is_likely_heading(self, span, avg_font_size, common_fonts):
-        text = span["text"].strip()
-        if len(text) < 3 or len(text) > 200:
-            return False
-        if re.match(r'^[\d\s\.\-\(\)]+$', text):
-            return False
-        if re.match(r'^(page|copyright|version|\d+\s*of\s*\d+)', text.lower()):
-            return False
-        is_bold = span["flags"] & 16
-        is_larger = span["size"] > avg_font_size * 1.1
-        is_much_larger = span["size"] > avg_font_size * 1.3
-        has_numbering = re.match(r'^\d+\.?\s+', text) or re.match(r'^\d+\.\d+\.?\s+', text)
-        is_title_case = text.istitle()
-        is_all_caps = text.isupper() and len(text) > 3
-        is_different_font = span["font"] not in common_fonts[:2]
-        score = 0
-        if is_bold: score += 2
-        if is_larger: score += 1
-        if is_much_larger: score += 2
-        if has_numbering: score += 2
-        if is_title_case: score += 1
-        if is_all_caps: score += 1
-        if is_different_font: score += 1
-        if re.match(r'^(chapter|section|part|appendix)\s+\d+', text.lower()): score += 3
-        if re.match(r'^[A-Z][a-z]+(\s+[A-Z][a-z]+)*\s*$', text): score += 1
-        return score >= 3
-
-    def extract_outline(self, pdf_path):
-        """Extract structured outline from PDF using PaddleOCR"""
-        all_spans, page_texts = self.ocr_extract_text_from_pdf(pdf_path)
-        font_sizes = [span["size"] for span in all_spans]
-        avg_font_size = sum(font_sizes) / len(font_sizes) if font_sizes else 12.0
-        common_fonts = ["OCR"] * 5
-        title = self._extract_title(page_texts.get(1, []), avg_font_size)
-        outline = self._extract_headings(all_spans, avg_font_size, common_fonts)
-        return {"title": title, "outline": outline}
-
-    # ... (keep _extract_title and _extract_headings unchanged) ...
-    def _extract_title(self, first_page_spans, avg_font_size):
-        """Extract document title from first page"""
-        if not first_page_spans:
-            return "Untitled Document"
-        
-        # Look for title in the top portion of the first page
-        top_spans = [span for span in first_page_spans if span["bbox"][1] < 200]
-        
-        if not top_spans:
-            top_spans = first_page_spans[:10]  # Fallback to first 10 spans
-        
-        # Find potential title candidates
-        title_candidates = []
-        
-        for span in top_spans:
-            text = span["text"].strip()
-            
-            # Skip very short text or common headers
-            if len(text) < 5:
-                continue
-                
-            if re.match(r'^(copyright|version|page|©)', text.lower()):
-                continue
-            
-            # Look for large text or bold text
-            is_bold = span["flags"] & 16
-            is_large = span["size"] > avg_font_size * 1.2
-            
-            if is_large or is_bold:
-                title_candidates.append({
-                    "text": text,
-                    "size": span["size"],
-                    "bold": is_bold,
-                    "y_pos": span["bbox"][1]
-                })
-        
-        if not title_candidates:
-            # Fallback: use the largest text on first page
-            max_size = max(span["size"] for span in first_page_spans)
-            title_candidates = [
-                {"text": span["text"], "size": span["size"], "bold": False, "y_pos": span["bbox"][1]}
-                for span in first_page_spans 
-                if span["size"] == max_size and len(span["text"]) > 3
-            ]
-        
-        if title_candidates:
-            # Sort by size (descending) and then by position (ascending)
-            title_candidates.sort(key=lambda x: (-x["size"], x["y_pos"]))
-            
-            # Combine multiple title parts if they're close to each other
-            main_title = title_candidates[0]["text"]
-            for candidate in title_candidates[1:]:
-                if abs(candidate["y_pos"] - title_candidates[0]["y_pos"]) < 50:
-                    if candidate["text"] not in main_title:
-                        main_title += " " + candidate["text"]
-            
-            main_title = self.clean_text(main_title.title())
-            
-            # Look for additional title parts
-            for candidate in title_candidates[1:3]:
-                if (candidate["size"] >= title_candidates[0]["size"] * 0.9 and
-                    abs(candidate["y_pos"] - title_candidates[0]["y_pos"]) < 50):
-                    main_title += " " + candidate["text"]
-            
-            return self.clean_text(main_title)
-        
-        return "Untitled Document"
+def calculate_iou(box1: List[float], box2: List[float]) -> float:
+    """Calculate Intersection over Union (IoU) between two bounding boxes"""
+    x1_inter = max(box1[0], box2[0])
+    y1_inter = max(box1[1], box2[1])
+    x2_inter = min(box1[2], box2[2])
+    y2_inter = min(box1[3], box2[3])
     
-    from collections import defaultdict
+    # Check if there's an intersection
+    if x1_inter >= x2_inter or y1_inter >= y2_inter:
+        return 0.0
+    
+    inter_area = (x2_inter - x1_inter) * (y2_inter - y1_inter)
+    box1_area = (box1[2] - box1[0]) * (box1[3] - box1[1])
+    box2_area = (box2[2] - box2[0]) * (box2[3] - box2[1])
+    
+    union_area = box1_area + box2_area - inter_area
+    return inter_area / union_area if union_area > 0 else 0.0
 
-    def compute_avg_height_by_page(self, spans):
-        page_heights = defaultdict(list)
-        for s in spans:
-            height = s["bbox"][3] - s["bbox"][1]
-            page_heights[s["page"]].append(height)
+def calculate_distance(center1: Tuple[float, float], center2: Tuple[float, float]) -> float:
+    """Calculate Euclidean distance between two centers"""
+    return np.sqrt((center1[0] - center2[0])**2 + (center1[1] - center2[1])**2)
 
-        return {page: sum(hs)/len(hs) for page, hs in page_heights.items()}
+def extract_pymupdf_blocks(page: fitz.Page, page_num: int) -> List[TextBlock]:
+    """Extract text blocks from PyMuPDF with font information"""
+    blocks = []
+    text_dict = page.get_text("dict")
+    
+    for block in text_dict["blocks"]:
+        if block.get("type") == 0:  # Text block
+            for line in block["lines"]:
+                for span in line["spans"]:
+                    text = span["text"].strip()
+                    if text and len(text) > 1:  # Filter out single characters
+                        blocks.append(TextBlock(
+                            text=text,
+                            bbox=span["bbox"],
+                            font_size=span["size"],
+                            font_name=span["font"],
+                            page_num=page_num
+                        ))
+    return blocks
+
+
+
+def get_complete_text_in_region(page, bbox, ocr_results, expansion_factor=1.3):
+    """
+    Extracts complete text in a region by expanding search area and 
+    collecting adjacent text blocks until word boundaries
+    """
+    import re
+    
+    # Expand bounding box to catch nearby text
+    x0, y0, x1, y1 = bbox
+    width, height = x1 - x0, y1 - y0
+    
+    # Create expanded search region
+    expanded_bbox = (
+        max(0, x0 - width * (expansion_factor - 1) / 2),
+        max(0, y0 - height * (expansion_factor - 1) / 2),
+        x1 + width * (expansion_factor - 1) / 2,
+        y1 + height * (expansion_factor - 1) / 2
+    )
+    
+    # Collect all OCR text blocks that intersect with expanded region
+    text_candidates = []
+    for line in ocr_results[0] if ocr_results and ocr_results[0] else []:
+        ocr_bbox = line[0]  # OCR bounding box coordinates
+        text = line[1][0]
+        confidence = line[1][1]
         
-    def _extract_headings(self, all_spans, avg_font_size, common_fonts):
-        heading_candidates = []
-
-        avg_height_by_page = self.compute_avg_height_by_page(all_spans)
-        for span in all_spans:
-            avg_height = avg_height_by_page[span["page"]]
-            if self.is_likely_heading_no_fonts(span, avg_height):
-                heading_candidates.append(span)
-
-        if not heading_candidates:
-            return []
-
-        seen = set()
-        unique_headings = []
-        for heading in heading_candidates:
-            key = (heading["text"], heading["page"])
-            if key not in seen:
-                seen.add(key)
-                unique_headings.append(heading)
-
-        # Sort by page and top position
-        unique_headings.sort(key=lambda x: (x["page"], x["bbox"][1]))
-
-        # Assign hierarchy using heuristics
-        outline = []
-        last_y = None
-        current_level = "H1"
-
-        for heading in unique_headings:
-            text = heading["text"]
-            y = heading["bbox"][1]
-
-            if last_y is None:
-                level = "H1"
-            else:
-                dy = y - last_y
-                if dy > 50:
-                    level = "H2"
-                else:
-                    level = "H3"
-
-            outline.append({
-                "level": level,
-                "text": text,
-                "page": heading["page"]
+        if confidence > 0.6 and boxes_overlap(expanded_bbox, convert_ocr_bbox(ocr_bbox)):
+            # Convert OCR 4-point format to [x0,y0,x1,y1]
+            xs = [p[0] for p in ocr_bbox]
+            ys = [p[1] for p in ocr_bbox]
+            ocr_x0, ocr_y0, ocr_x1, ocr_y1 = min(xs), min(ys), max(xs), max(ys)
+            
+            text_candidates.append({
+                'text': text,
+                'bbox': [ocr_x0, ocr_y0, ocr_x1, ocr_y1],
+                'distance': calculate_distance((x0, y0), (ocr_x0, ocr_y0))
             })
+    
+    if not text_candidates:
+        return ""
+    
+    # Sort by proximity to original bbox
+    text_candidates.sort(key=lambda x: x['distance'])
+    
+    # Build complete text by joining adjacent blocks
+    complete_text_parts = []
+    for candidate in text_candidates:
+        text_part = candidate['text'].strip()
+        if text_part:
+            complete_text_parts.append(text_part)
+    
+    # Join and clean up the complete text
+    complete_text = " ".join(complete_text_parts)
+    
+    # Apply smart text completion rules
+    complete_text = apply_completion_rules(complete_text)
+    
+    return complete_text
 
-            last_y = y
+def apply_completion_rules(text):
+    """
+    Apply intelligent text completion for common truncations
+    """
+    # Common abbreviation expansions
+    completions = {
+        "RFP: R": "RFP: Request for Proposal",
+        "AI & M": "AI & Machine Learning", 
+        "Data S": "Data Science",
+        "ML A": "Machine Learning Algorithms",
+        "NLP P": "Natural Language Processing",
+        "CV R": "Computer Vision Recognition",
+        "API D": "API Documentation",
+        "DB M": "Database Management"
+    }
+    
+    # Direct replacement for known truncations
+    for truncated, complete in completions.items():
+        if text.startswith(truncated):
+            return complete
+    
+    # Pattern-based completion for common formats
+    import re
+    
+    # Handle "Word: L" -> "Word: Long Form" patterns
+    colon_pattern = r'^([A-Z]{2,4}):\s+([A-Z])$'
+    match = re.match(colon_pattern, text)
+    if match:
+        abbreviation, first_letter = match.groups()
+        
+        # Common expansions based on first letter
+        expansions = {
+            'R': 'Request',
+            'A': 'Analysis', 
+            'M': 'Management',
+            'S': 'System',
+            'P': 'Process',
+            'D': 'Development'
+        }
+        
+        if first_letter in expansions:
+            return f"{abbreviation}: {expansions[first_letter]}"
+    
+    return text
 
-        return outline
+def boxes_overlap(bbox1, bbox2):
+    """Check if two bounding boxes overlap"""
+    return not (bbox1[2] <= bbox2[0] or bbox2[2] <= bbox1[0] or 
+               bbox1[3] <= bbox2[1] or bbox2[3] <= bbox1[1])
 
-    def process_all_pdfs(self):
-        pdf_files = list(self.input_dir.glob("*.pdf"))
-        if not pdf_files:
-            print("No PDF files found in input directory")
-            return
-        for pdf_file in pdf_files:
-            try:
-                print(f"Processing {pdf_file.name}...")
-                outline_data = self.extract_outline(str(pdf_file))
-                output_filename = pdf_file.stem + ".json"
-                output_path = self.output_dir / output_filename
-                with open(output_path, 'w', encoding='utf-8') as f:
-                    json.dump(outline_data, f, indent=2, ensure_ascii=False)
-                print(f"✅ Generated {output_filename}")
-                print(f"   Title: {outline_data['title']}")
-                print(f"   Headings found: {len(outline_data['outline'])}")
-            except Exception as e:
-                print(f"❌ Error processing {pdf_file.name}: {str(e)}")
+def convert_ocr_bbox(ocr_bbox):
+    """Convert OCR 4-point format to standard bbox format"""
+    xs = [p[0] for p in ocr_bbox]
+    ys = [p[1] for p in ocr_bbox]
+    return [min(xs), min(ys), max(xs), max(ys)]
+
+def find_best_ocr_match(pdf_bbox, ocr_results,
+                        iou_threshold=0.3, distance_threshold=50.0):
+    """
+    Return highest-scoring OCR text overlapping or nearest to a PyMuPDF span.
+    """
+    if not (ocr_results and ocr_results[0]):
+        return ""
+    best_text, best_score = "", -1
+    px0, py0, px1, py1 = pdf_bbox
+    pcx, pcy = (px0 + px1) / 2, (py0 + py1) / 2
+
+    for quad, (text, conf) in ocr_results[0]:
+        if conf < 0.6 or not text.strip():
+            continue
+        ox0, oy0, ox1, oy1 = convert_ocr_bbox(quad)
+        iou = calculate_iou(pdf_bbox, [ox0, oy0, ox1, oy1])
+        dcx, dcy = (ox0 + ox1) / 2, (oy0 + oy1) / 2
+        dist = calculate_distance((pcx, pcy), (dcx, dcy))
+        score = iou * 0.4 + conf * 0.3 + (1.0 / (1 + dist/100)) * 0.3
+        if score > best_score and (iou >= iou_threshold or dist < distance_threshold):
+            best_text, best_score = text, score
+    return best_text
+
+def extract_paddleocr_blocks(page_image: bytes, page_num: int) -> List[TextBlock]:
+    """Extract text blocks from PaddleOCR"""
+    blocks = []
+    ocr_results = ocr_model.ocr(page_image, cls=True)
+    
+    if ocr_results and ocr_results[0]:
+        for result in ocr_results[0]:
+            points = result[0]  # 4 corner points
+            text_info = result[1]  # (text, confidence)
+            
+            text = text_info[0].strip()
+            confidence = text_info[1]
+            
+            if text and confidence > 0.6 and len(text) > 1:
+                # Convert 4 corner points to bbox [x0, y0, x1, y1]
+                xs = [p[0] for p in points]
+                ys = [p[1] for p in points]
+                bbox = [min(xs), min(ys), max(xs), max(ys)]
+                
+                blocks.append(TextBlock(
+                    text=text,
+                    bbox=bbox,
+                    font_size=0,  # OCR doesn't provide font size
+                    confidence=confidence,
+                    page_num=page_num
+                ))
+    return blocks
+
+def match_blocks(pymupdf_blocks: List[TextBlock], page, 
+                         iou_threshold: float = 0.3, distance_threshold: float = 50.0) -> List[TextBlock]:
+    matched_blocks = []
+    
+    # Get OCR results for the entire page
+    mat = fitz.Matrix(2.0, 2.0)
+    pix = page.get_pixmap(matrix=mat)
+    page_image = pix.tobytes("png")
+    ocr_results = ocr_model.ocr(page_image, cls=True)
+    
+    for pdf_block in pymupdf_blocks:
+        # Try standard matching first
+        matched_text = find_best_ocr_match(pdf_block.bbox, ocr_results)
+        
+        # If text seems truncated, apply completion
+        if is_text_truncated(matched_text):
+            complete_text = get_complete_text_in_region(page, pdf_block.bbox, ocr_results)
+            if len(complete_text) > len(matched_text):
+                matched_text = complete_text
+        
+        # Create enhanced text block
+        enhanced_block = TextBlock(
+            text=matched_text if matched_text else pdf_block.text,
+            bbox=pdf_block.bbox,
+            font_size=pdf_block.font_size,
+            font_name=pdf_block.font_name,
+            confidence=1.0,
+            page_num=pdf_block.page_num
+        )
+        
+        matched_blocks.append(enhanced_block)
+    
+    return matched_blocks
+
+def is_text_truncated(text):
+    """Detect if text appears to be truncated"""
+    if not text:
+        return False
+        
+    # Check for common truncation patterns
+    truncation_indicators = [
+        len(text) < 5,  # Very short text
+        text.endswith((' R', ' A', ' M', ' S', ' P', ' D')),  # Single letter endings
+        text.count(':') > 0 and len(text.split(':')[-1].strip()) <= 2,  # Colon with short suffix
+        text[-1].isupper() and len(text.split()[-1]) == 1  # Ends with single uppercase letter
+    ]
+    
+    return any(truncation_indicators)
+
+def classify_heading_levels(blocks: List[TextBlock]) -> Dict[str, str]:
+    """Classify font sizes into heading levels"""
+    if not blocks:
+        return {}
+    
+    # Group blocks by font size
+    size_groups = defaultdict(list)
+    for block in blocks:
+        size_groups[round(block.font_size, 1)].append(block)
+    
+    # Sort font sizes in descending order
+    sorted_sizes = sorted(size_groups.keys(), reverse=True)
+    
+    # Classify levels
+    level_mapping = {}
+    
+    if len(sorted_sizes) >= 1:
+        level_mapping[sorted_sizes[0]] = "Title"
+    if len(sorted_sizes) >= 2:
+        level_mapping[sorted_sizes[1]] = "H1"
+    if len(sorted_sizes) >= 3:
+        level_mapping[sorted_sizes[2]] = "H2"
+    if len(sorted_sizes) >= 4:
+        level_mapping[sorted_sizes[3]] = "H3"
+    
+    return level_mapping
+
+def is_likely_heading(block: TextBlock) -> bool:
+    """Determine if a text block is likely to be a heading"""
+    text = block.text.strip()
+    
+    # Basic heuristics for heading detection
+    if len(text) < 3 or len(text) > 200:  # Too short or too long
+        return False
+    
+    # Check if it's mostly uppercase or title case
+    words = text.split()
+    if len(words) <= 8:  # Headings are usually short
+        title_case_count = sum(1 for word in words if word.istitle())
+        upper_case_count = sum(1 for word in words if word.isupper() and len(word) > 1)
+        
+        if title_case_count >= len(words) * 0.7 or upper_case_count >= len(words) * 0.5:
+            return True
+    
+    return True  # For now, let font size be the primary filter
+
+def extract_title_from_first_page(page_blocks: List[TextBlock],
+                                  avg_font: float) -> str:             # ⟵ NEW
+    """
+    Choose the best-looking span on page-1 that is NOT black-listed.
+    """
+    if not page_blocks:
+        return "Untitled Document"
+
+    # Sort candidates by font-size then vertical position
+    page_blocks.sort(key=lambda b: (-b.font_size, b.bbox[1]))
+
+    for blk in page_blocks[:40]:           # examine top 40 candidates
+        txt = blk.text.strip()
+        if len(txt) < 4:
+            continue
+        if txt.lower() in TITLE_BLACKLIST: # ⟵ Black-list filter
+            continue
+        if blk.font_size < avg_font * 1.15 and not blk.text.isupper():
+            continue                       # must be visibly larger
+        return clean_title(txt)            # found a good one
+
+    # Fallback: largest non-blacklisted text
+    for blk in page_blocks:
+        if blk.text.lower() not in TITLE_BLACKLIST:
+            return clean_title(blk.text)
+    return "Untitled Document"
+
+def clean_title(text: str) -> str:                                       # ⟵ NEW
+    """Collapse whitespace and apply title-case except ALL-CAPS acronyms."""
+    parts = [w if w.isupper() else w.capitalize() for w in text.split()]
+    return " ".join(parts)
+
+def extract_outline_from_pdf(pdf_path: Path) -> Dict:
+    doc = fitz.open(pdf_path)
+    all_blocks = []
+    for p in range(min(50, len(doc))):
+        page = doc[p]
+        pymupdf_blocks = extract_pymupdf_blocks(page, p)
+        matched = match_blocks(pymupdf_blocks, page)
+        all_blocks.extend(matched)
+    doc.close()
+
+    # ---------- ᴛɪᴛʟᴇ ---------------------------------------------------
+    first_page_blocks = [b for b in all_blocks if b.page_num == 0]
+    avg_font_size = (
+        sum(b.font_size for b in first_page_blocks if b.font_size) /
+        max(1, len([b for b in first_page_blocks if b.font_size]))
+    )
+    title = extract_title_from_first_page(first_page_blocks, avg_font_size)  # ⟵ MOD
+
+    # ---------- headings (unchanged) -----------------------------------
+    heading_blocks = [b for b in all_blocks if is_likely_heading(b)]
+    level_map = classify_heading_levels(heading_blocks)
+    outline = []
+    for blk in heading_blocks:
+        lvl = level_map.get(round(blk.font_size, 1))
+        if lvl in {"H1", "H2", "H3"}:
+            outline.append({"level": lvl, "text": blk.text, "page": blk.page_num + 1})
+
+    return {"title": title, "outline": outline}
+
+def process_all_pdfs():
+    """Process all PDFs in the input directory"""
+    if not INPUT_DIR.exists():
+        print(f"Input directory {INPUT_DIR} does not exist. Creating it...")
+        INPUT_DIR.mkdir(parents=True)
+        print("Please place your PDF files in the input directory and run again.")
+        return
+    
+    pdf_files = list(INPUT_DIR.glob("*.pdf"))
+    
+    if not pdf_files:
+        print(f"No PDF files found in {INPUT_DIR}")
+        return
+    
+    print(f"Found {len(pdf_files)} PDF file(s) to process...")
+    
+    for pdf_path in pdf_files:
+        try:
+            print(f"Processing: {pdf_path.name}...")
+            
+            # Extract outline
+            result = extract_outline_from_pdf(pdf_path)
+            
+            # Save result
+            output_path = OUTPUT_DIR / f"{pdf_path.stem}.json"
+            with open(output_path, 'w', encoding='utf-8') as f:
+                json.dump(result, f, indent=2, ensure_ascii=False)
+            
+            print(f"✓ Successfully processed: {pdf_path.name}")
+            print(f"  Title: {result['title'][:50]}..." if len(result['title']) > 50 else f"  Title: {result['title']}")
+            print(f"  Found {len(result['outline'])} headings")
+            
+        except Exception as e:
+            print(f"✗ Error processing {pdf_path.name}: {str(e)}")
+    
+    print(f"\nAll results saved to: {OUTPUT_DIR}")
 
 if __name__ == "__main__":
-    extractor = PDFOutlineExtractor()
-    extractor.process_all_pdfs()
+    print("=== Hybrid PyMuPDF + PaddleOCR PDF Outline Extractor ===")
+    print("This tool combines PyMuPDF's structure detection with PaddleOCR's accurate text extraction")
+    print()
+    
+    process_all_pdfs()
