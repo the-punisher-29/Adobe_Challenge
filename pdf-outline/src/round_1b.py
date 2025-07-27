@@ -2,13 +2,16 @@ import os
 import json
 import fitz  # PyMuPDF
 from pathlib import Path
-from typing import Tuple
+from typing import Tuple, Dict, List
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 import re
 from collections import defaultdict, Counter
+from sentence_transformers import SentenceTransformer, util
+
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 class PDFOutlineExtractor:
     def __init__(self):
@@ -26,8 +29,8 @@ class PDFOutlineExtractor:
         # Remove extra whitespace and normalize
         text = re.sub(r'\s+', ' ', text.strip())
         
-        # Remove common artifacts
-        text = re.sub(r'[^\w\s\-\.\(\)\[\]\{\}:;,\u2013\u2014\u2019\u201c\u201d]', '', text)
+        # Remove common artifacts but keep more characters for content
+        text = re.sub(r'[^\w\s\-\.\(\)\[\]\{\}:;,\u2013\u2014\u2019\u201c\u201d\!\?\/\@\#\$\%\^\&\*\+\=\<\>\~\`]', '', text)
         
         return text
 
@@ -86,8 +89,149 @@ class PDFOutlineExtractor:
             
         return score >= 3
 
+    def extract_text_between_headings(self, doc, start_page, end_page, start_bbox=None, end_bbox=None):
+        """Extract text content between two headings"""
+        content_text = []
+        
+        for page_num in range(start_page, end_page + 1):
+            page = doc[page_num - 1]  # fitz uses 0-based indexing
+            page_text = page.get_text()
+            
+            if page_num == start_page and start_bbox:
+                # For the starting page, get text after the heading
+                blocks = page.get_text("dict")["blocks"]
+                page_content = []
+                start_y = start_bbox[3]  # bottom of heading bbox
+                
+                for block in blocks:
+                    if "lines" not in block:
+                        continue
+                    for line in block["lines"]:
+                        line_bbox = line["bbox"]
+                        if line_bbox[1] > start_y:  # Line starts below the heading
+                            line_text = ""
+                            for span in line["spans"]:
+                                line_text += span["text"]
+                            if line_text.strip():
+                                page_content.append(line_text.strip())
+                
+                content_text.extend(page_content)
+                
+            elif page_num == end_page and end_bbox:
+                # For the ending page, get text before the next heading
+                blocks = page.get_text("dict")["blocks"]
+                page_content = []
+                end_y = end_bbox[1]  # top of next heading bbox
+                
+                for block in blocks:
+                    if "lines" not in block:
+                        continue
+                    for line in block["lines"]:
+                        line_bbox = line["bbox"]
+                        if line_bbox[3] < end_y:  # Line ends above the next heading
+                            line_text = ""
+                            for span in line["spans"]:
+                                line_text += span["text"]
+                            if line_text.strip():
+                                page_content.append(line_text.strip())
+                
+                content_text.extend(page_content)
+                
+            else:
+                # For middle pages, get all text
+                lines = page_text.split('\n')
+                content_text.extend([line.strip() for line in lines if line.strip()])
+        
+        # Clean and join the content
+        full_content = ' '.join(content_text)
+        return self.clean_text(full_content)
+
+    def extract_outline_with_content(self, pdf_path):
+        """Extract structured outline from PDF with section content"""
+        doc = fitz.open(pdf_path)
+        
+        # First, extract the basic outline structure
+        outline_data = self.extract_outline(pdf_path)
+        
+        # Now extract content for each section
+        headings_with_content = []
+        
+        for i, heading in enumerate(outline_data["outline"]):
+            heading_info = {
+                "level": heading["level"],
+                "text": heading["text"],
+                "page": heading["page"],
+                "content": ""
+            }
+            
+            # Determine the range for content extraction
+            start_page = heading["page"]
+            
+            # Find the next heading to determine end page
+            if i + 1 < len(outline_data["outline"]):
+                end_page = outline_data["outline"][i + 1]["page"]
+            else:
+                end_page = len(doc)  # Last section goes to end of document
+            
+            # Extract content between this heading and the next
+            try:
+                # Re-open doc to get bbox information
+                page = doc[start_page - 1]
+                blocks = page.get_text("dict")["blocks"]
+                
+                # Find the heading's bbox
+                heading_bbox = None
+                for block in blocks:
+                    if "lines" not in block:
+                        continue
+                    for line in block["lines"]:
+                        for span in line["spans"]:
+                            if heading["text"] in span["text"]:
+                                heading_bbox = span["bbox"]
+                                break
+                        if heading_bbox:
+                            break
+                    if heading_bbox:
+                        break
+                
+                # Find next heading's bbox if on same page
+                next_heading_bbox = None
+                if i + 1 < len(outline_data["outline"]) and outline_data["outline"][i + 1]["page"] == start_page:
+                    next_heading_text = outline_data["outline"][i + 1]["text"]
+                    for block in blocks:
+                        if "lines" not in block:
+                            continue
+                        for line in block["lines"]:
+                            for span in line["spans"]:
+                                if next_heading_text in span["text"]:
+                                    next_heading_bbox = span["bbox"]
+                                    break
+                            if next_heading_bbox:
+                                break
+                        if next_heading_bbox:
+                            break
+                
+                # Extract content
+                content = self.extract_text_between_headings(
+                    doc, start_page, end_page, heading_bbox, next_heading_bbox
+                )
+                heading_info["content"] = content[:2000]  # Limit content length
+                
+            except Exception as e:
+                print(f"Warning: Could not extract content for heading '{heading['text']}': {e}")
+                heading_info["content"] = ""
+            
+            headings_with_content.append(heading_info)
+        
+        doc.close()
+        
+        return {
+            "title": outline_data["title"],
+            "outline": headings_with_content
+        }
+
     def extract_outline(self, pdf_path):
-        """Extract structured outline from PDF"""
+        """Extract structured outline from PDF (original method)"""
         doc = fitz.open(pdf_path)
         
         # Collect all text spans with font information
@@ -270,32 +414,34 @@ class PDFOutlineExtractor:
         return outline
     
     def process_all_pdfs(self):
-        """Process all PDFs in input directory"""
+        """Process all PDFs in input directory and return headings with content"""
         pdf_files = list(self.input_dir.glob("*.pdf"))
         
         if not pdf_files:
             print("No PDF files found in input directory")
             return ""
         
-        headings = ""
+        all_documents = []
+        headings_summary = ""
         
         for pdf_file in pdf_files:
             try:
                 print(f"Processing {pdf_file.name}...")
                 
-                # Extract outline
-                outline_data = self.extract_outline(str(pdf_file))
-
+                # Extract outline with content
+                outline_data = self.extract_outline_with_content(str(pdf_file))
+                all_documents.append(outline_data)
+                
+                # Create summary for ranking
                 heading_texts = [h["text"] for h in outline_data["outline"]]
                 joined_headings = ", ".join(heading_texts)
-
-                headings += f"\n\nTitle: {outline_data['title']}\nHeadings: {joined_headings}"
-
+                headings_summary += f"\n\nTitle: {outline_data['title']}\nHeadings: {joined_headings}"
+                
                 # Generate output filename
-                output_filename = pdf_file.stem + ".json"
+                output_filename = pdf_file.stem + "_with_content.json"
                 output_path = self.output_dir / output_filename
                 
-                # Save JSON output
+                # Save JSON output with content
                 with open(output_path, 'w', encoding='utf-8') as f:
                     json.dump(outline_data, f, indent=2, ensure_ascii=False)
                 
@@ -305,8 +451,9 @@ class PDFOutlineExtractor:
                 
             except Exception as e:
                 print(f"❌ Error processing {pdf_file.name}: {str(e)}")
+        
+        return headings_summary, all_documents
 
-        return headings
 
 def get_user_inputs() -> Tuple[str, str]:
     """Get persona and job-to-be-done from user input"""
@@ -338,60 +485,9 @@ def get_user_inputs() -> Tuple[str, str]:
 
     return persona, job_to_be_done
 
-# def main():
-#     extractor = PDFOutlineExtractor()
-#     headings = extractor.process_all_pdfs()
-#     model_id = "Qwen/Qwen2-0.5B-Instruct"
-#     tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
-#     model = AutoModelForCausalLM.from_pretrained(
-#         model_id,
-#         device_map="cpu",
-#         torch_dtype=torch.float32
-#     )
-
-#     tokenizer.use_default_system_prompt = False
-
-#     # persona, job_to_be_done = get_user_inputs()
-#     persona = "Travel Planner"
-
-#     job_to_be_done = "Plan a 4 day trip for 10 college students"
-
-#     content = f"""Your persona is of a {persona}. The job that you have to do is find the relevance of the given headings to {job_to_be_done}.
-#         And then return in decending order in a json format.
-#         The headings along with title of different pdfs is:
-#         {headings}
-#     """
-
-#     print(content)
-
-#     messages = [
-#         {"role": "user", "content": content}
-#     ]
-    
-#     input_ids = tokenizer.apply_chat_template(
-#         messages,
-#         return_tensors="pt"
-#     ).to(model.device)
-
-#     # Generate response
-#     with torch.no_grad():
-#         output = model.generate(
-#             input_ids=input_ids,
-#             max_new_tokens=256,
-#             do_sample=True,
-#             temperature=0.7,
-#             top_p=0.9
-#         )
-
-#     # Decode and print
-#     response = tokenizer.decode(output[0][input_ids.shape[1]:], skip_special_tokens=True)
-#     print("Qwen2:", response)
-
-from sentence_transformers import SentenceTransformer, util
 
 def rank_headings_with_embeddings(headings_str: str, query: str = "Plan a 4 day trip for 10 college students"):
     """Rank extracted headings using semantic similarity to the task query"""
-
     model = SentenceTransformer("all-MiniLM-L6-v2")
 
     # Parse the headings_str into individual docs
@@ -419,21 +515,240 @@ def rank_headings_with_embeddings(headings_str: str, query: str = "Plan a 4 day 
 
     return results
 
+
+def select_top_headings_with_content(all_documents, job, top_n=6):
+    """Select top headings with their content based on semantic similarity"""
+    model = SentenceTransformer("all-MiniLM-L6-v2")
+    query_emb = model.encode(job, convert_to_tensor=True)
+    results = []
+    
+    for doc in all_documents:
+        title = doc["title"]
+        headings = doc["outline"]
+        
+        if not headings:
+            continue
+        
+        # Create embeddings for headings (including content in similarity calculation)
+        heading_texts = []
+        for h in headings:
+            # Combine heading text with a portion of content for better similarity matching
+            combined_text = h["text"]
+            if h.get("content"):
+                combined_text += " " + h["content"][:500]  # Use first 500 chars of content
+            heading_texts.append(combined_text)
+        
+        heading_embs = model.encode(heading_texts, convert_to_tensor=True)
+        similarities = util.pytorch_cos_sim(query_emb, heading_embs)[0]
+        
+        # Rank headings with their full information
+        heading_similarity_pairs = list(zip(headings, similarities.tolist()))
+        ranked = sorted(heading_similarity_pairs, key=lambda x: -x[1])
+        
+        # Get top headings with all their information
+        top_headings = []
+        for heading_info, score in ranked[:top_n]:
+            top_headings.append({
+                "text": heading_info["text"],
+                "level": heading_info["level"],
+                "page": heading_info["page"],
+                "content": heading_info.get("content", ""),
+                "relevance_score": round(score, 4)
+            })
+        
+        results.append({
+            "title": title,
+            "top_headings": top_headings
+        })
+    
+    return results
+
+
+def build_enhanced_qwen_prompt(top_headings_by_doc, persona, job):
+    """Build enhanced prompt with content for Qwen"""
+    docs_info = []
+    
+    for doc in top_headings_by_doc:
+        # doc_info = f"\nTitle: {doc['title']}\n"
+        # doc_info += "Headings:\n"
+        doc_info = ""
+        
+        for i, heading in enumerate(doc["top_headings"], 1):
+            doc_info += f"""{doc['title']}: {heading['text']}\n"""
+            if heading.get("content"):
+                # Truncate content for prompt
+                content_preview = heading["content"][:300] + "..." if len(heading["content"]) > 300 else heading["content"]
+                # doc_info += f"   Content: {content_preview}\n"
+        
+        docs_info.append(doc_info)
+    
+    all_docs_text = "\n".join(docs_info)
+    
+    prompt = (
+        f"You are a {persona}. Your task is '{job}'.\n\n"
+        "Based on the following document titles, headings, and their content, "
+        "provide a structured analysis that helps accomplish the task. "
+        "Focus on the most relevant headings and their title.\n\n"
+        "Please provide:\n"
+        "The best 10 headings and their titles in the folloing format:\n"
+        "<Title 1>: <Heading 1>, <Title 2>: <Heading 2> ... and so on\n"
+        "Documents Title and the underlying headings are(in same format are):\n"
+        f"{all_docs_text}\n\n"
+    )
+    
+    return prompt
+
+
+# def main():
+#     extractor = PDFOutlineExtractor()
+#     headings_summary, all_documents = extractor.process_all_pdfs()
+    
+#     # Initialize model
+#     model_id = "Qwen/Qwen2-0.5B-Instruct"
+#     tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
+#     model = AutoModelForCausalLM.from_pretrained(
+#         model_id,
+#         device_map="cpu",
+#         torch_dtype=torch.float32
+#     )
+
+#     tokenizer.use_default_system_prompt = False
+
+#     persona = "Travel Planner"
+#     job_to_be_done = "Plan a 4 day trip for 10 college students"
+
+#     # Select top headings with content
+#     top_headings_with_content = select_top_headings_with_content(
+#         all_documents, job=job_to_be_done, top_n=6
+#     )
+    
+#     # Build enhanced prompt
+#     prompt = build_enhanced_qwen_prompt(top_headings_with_content, persona, job_to_be_done)
+#     print("\nEnhanced Prompt to Qwen:\n", prompt)
+
+#     # Generate response
+#     messages = [{"role": "user", "content": prompt}]
+#     input_ids = tokenizer.apply_chat_template(messages, return_tensors="pt").to(model.device)
+
+#     with torch.no_grad():
+#         output = model.generate(
+#             input_ids=input_ids,
+#             max_new_tokens=512,  # Increased for more detailed response
+#             do_sample=True,
+#             temperature=0.7,
+#             top_p=0.9
+#         )
+    
+#     response = tokenizer.decode(output[0][input_ids.shape[1]:], skip_special_tokens=True)
+#     print("\n" + "="*60)
+#     print("QWEN ANALYSIS RESULT:")
+#     print("="*60)
+#     print(response)
+
+#     # Save final analysis
+#     final_output = {
+#         "persona": persona,
+#         "job_to_be_done": job_to_be_done,
+#         "selected_sections": top_headings_with_content,
+#         "ai_analysis": response
+#     }
+    
+#     final_output_path = extractor.output_dir / "final_analysis.json"
+#     with open(final_output_path, 'w', encoding='utf-8') as f:
+#         json.dump(final_output, f, indent=2, ensure_ascii=False)
+    
+#     print(f"\n✅ Final analysis saved to: {final_output_path}")
+
+
+# if __name__ == "__main__":
+#     main()
+
+def get_all_sections_ranked(all_documents, job):
+    """Get all sections from all documents ranked by relevance score"""
+    model = SentenceTransformer("all-MiniLM-L6-v2")
+    query_emb = model.encode(job, convert_to_tensor=True)
+    
+    all_sections = []
+    
+    for doc in all_documents:
+        title = doc["title"]
+        headings = doc["outline"]
+        
+        if not headings:
+            continue
+        
+        # Create embeddings for headings (including content in similarity calculation)
+        heading_texts = []
+        for h in headings:
+            # Combine heading text with a portion of content for better similarity matching
+            combined_text = h["text"]
+            if h.get("content"):
+                combined_text += " " + h["content"][:500]  # Use first 500 chars of content
+            heading_texts.append(combined_text)
+        
+        heading_embs = model.encode(heading_texts, convert_to_tensor=True)
+        similarities = util.pytorch_cos_sim(query_emb, heading_embs)[0]
+        
+        # Add each section with its relevance score
+        for heading_info, score in zip(headings, similarities.tolist()):
+            section = {
+                "title": title,
+                "heading_text": heading_info["text"],
+                "level": heading_info["level"],
+                "page": heading_info["page"],
+                "content": heading_info.get("content", ""),
+                "relevance_score": round(score, 4)
+            }
+            all_sections.append(section)
+    
+    # Sort all sections by relevance score (descending)
+    all_sections.sort(key=lambda x: x["relevance_score"], reverse=True)
+    
+    return all_sections
+
 def main():
     extractor = PDFOutlineExtractor()
-    headings = extractor.process_all_pdfs()
+    headings_summary, all_documents = extractor.process_all_pdfs()
 
     persona = "Travel Planner"
     job_to_be_done = "Plan a 4 day trip for 10 college students"
 
-    print("\n📘 Ranking headings using sentence embeddings...\n")
+    # Get all headings with content from all documents
+    all_sections_with_scores = get_all_sections_ranked(all_documents, job_to_be_done)
+    
+    # Select top 10 sections across all documents
+    top_10_sections = all_sections_with_scores[:10]
+    
+    print("\n" + "="*80)
+    print("TOP 10 MOST RELEVANT SECTIONS:")
+    print("="*80)
+    
+    for i, section in enumerate(top_10_sections, 1):
+        print(f"\n{i}. {section['title']} - {section['heading_text']}")
+        print(f"   Page: {section['page']} | Relevance Score: {section['relevance_score']}")
+        print(f"   Content Preview: {section['content'][:200]}...")
+        print("-" * 60)
 
-    ranked = rank_headings_with_embeddings(headings, query=job_to_be_done)
+    # Save final analysis with only top 10 sections
+    final_output = {
+        "persona": persona,
+        "job_to_be_done": job_to_be_done,
+        "top_10_sections": top_10_sections,
+        "analysis_summary": {
+            "total_documents_processed": len(all_documents),
+            "total_sections_analyzed": len(all_sections_with_scores),
+            "selection_method": "semantic_similarity_ranking",
+            "top_sections_selected": 10
+        }
+    }
+    
+    final_output_path = extractor.output_dir / "final_output.json"
+    with open(final_output_path, 'w', encoding='utf-8') as f:
+        json.dump(final_output, f, indent=2, ensure_ascii=False)
+    
+    print(f"\n✅ Top 10 sections analysis saved to: {final_output_path}")
+    print(f"📊 Processed {len(all_documents)} documents with {len(all_sections_with_scores)} total sections")
 
-    for doc in ranked:
-        print(f"\n📄 Title: {doc['title']}")
-        for item in doc["ranked_headings"][:5]:  # Top 5 headings
-            print(f"   - {item['heading']} (score: {item['score']})")
 
 if __name__ == "__main__":
     main()
