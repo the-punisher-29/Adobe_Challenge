@@ -1,1 +1,4 @@
 myenv/
+1b_input/
+nltk_data/
+*.json
