@@ -1,5 +1,5 @@
 myenv/
-1b_input/
+reqs.txt
 nltk_data/
 *.json
 old/
