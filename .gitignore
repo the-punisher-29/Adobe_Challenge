@@ -2,3 +2,4 @@ myenv/
 reqs.txt
 nltk_data/
 *.json
+old/
