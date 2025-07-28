@@ -1,0 +1,15 @@
+fitz==0.0.1.dev2
+numpy==2.3.2
+opencv_contrib_python==4.10.0.84
+opencv_python==4.11.0.86
+paddleocr==2.8.0
+paddleocr.egg==info
+pdf2image==1.17.0
+pdfminer_six==20250506
+pdfplumber==0.11.7
+Pillow==11.3.0
+PyPDF2==3.0.1
+pytesseract==0.3.13
+sentence_transformers==5.0.0
+torch==2.1.0+cpu
+transformers==4.53.2
