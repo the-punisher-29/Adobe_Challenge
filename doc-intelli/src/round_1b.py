@@ -8,19 +8,31 @@ import torch
 import re
 from collections import defaultdict, Counter
 from sentence_transformers import SentenceTransformer, util
+import sys
 
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+def get_test_selection():
+    print("\nSelect test collection:")
+    print("1. Collection 1")
+    print("2. Collection 2")
+    print("3. Collection 3")
+    test_num = input("Enter test number (1/2/3): ").strip()
+    if test_num not in {"1", "2", "3"}:
+        print("Invalid selection. Defaulting to 1.")
+        test_num = "1"
+    return test_num
+
+
 class PDFOutlineExtractor:
-    def __init__(self, config_path="config.json"):
+    def __init__(self, input_dir, output_dir, config_path):
+        self.input_dir = Path(input_dir)
+        self.output_dir = Path(output_dir)
         self.config_path = config_path
         self.config = self.load_config()
         
-        self.input_dir = Path(f"{base_dir}/1b_input")
-        self.output_dir = Path(f"{base_dir}/output")
-
         if not self.output_dir.exists():
             self.output_dir.mkdir(parents=True, exist_ok=True)
     
@@ -503,10 +515,11 @@ def get_user_inputs() -> Tuple[str, str]:
     return persona, job_to_be_done
 
 
-def rank_headings_with_embeddings(headings_str: str, query: str = "Plan a 4 day trip for 10 college students"):
-    """Rank extracted headings using semantic similarity to the task query"""
+def rank_headings_with_embeddings(headings_str: str, persona: str, job_to_be_done: str):
+    """Rank extracted headings using semantic similarity to the combined persona and job-to_be_done query"""
     model = SentenceTransformer("all-MiniLM-L6-v2")
-
+    # Combine persona and job_to_be_done for the query
+    query = f"{persona}: {job_to_be_done}"
     # Parse the headings_str into individual docs
     documents = []
     for doc_block in headings_str.strip().split("\n\n"):
@@ -615,75 +628,13 @@ def build_enhanced_qwen_prompt(top_headings_by_doc, persona, job):
     
     return prompt
 
-
-# def main():
-#     extractor = PDFOutlineExtractor()
-#     headings_summary, all_documents = extractor.process_all_pdfs()
-    
-#     # Initialize model
-#     model_id = "Qwen/Qwen2-0.5B-Instruct"
-#     tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
-#     model = AutoModelForCausalLM.from_pretrained(
-#         model_id,
-#         device_map="cpu",
-#         torch_dtype=torch.float32
-#     )
-
-#     tokenizer.use_default_system_prompt = False
-
-#     persona = "Travel Planner"
-#     job_to_be_done = "Plan a 4 day trip for 10 college students"
-
-#     # Select top headings with content
-#     top_headings_with_content = select_top_headings_with_content(
-#         all_documents, job=job_to_be_done, top_n=6
-#     )
-    
-#     # Build enhanced prompt
-#     prompt = build_enhanced_qwen_prompt(top_headings_with_content, persona, job_to_be_done)
-#     print("\nEnhanced Prompt to Qwen:\n", prompt)
-
-#     # Generate response
-#     messages = [{"role": "user", "content": prompt}]
-#     input_ids = tokenizer.apply_chat_template(messages, return_tensors="pt").to(model.device)
-
-#     with torch.no_grad():
-#         output = model.generate(
-#             input_ids=input_ids,
-#             max_new_tokens=512,  # Increased for more detailed response
-#             do_sample=True,
-#             temperature=0.7,
-#             top_p=0.9
-#         )
-    
-#     response = tokenizer.decode(output[0][input_ids.shape[1]:], skip_special_tokens=True)
-#     print("\n" + "="*60)
-#     print("QWEN ANALYSIS RESULT:")
-#     print("="*60)
-#     print(response)
-
-#     # Save final analysis
-#     final_output = {
-#         "persona": persona,
-#         "job_to_be_done": job_to_be_done,
-#         "selected_sections": top_headings_with_content,
-#         "ai_analysis": response
-#     }
-    
-#     final_output_path = extractor.output_dir / "final_analysis.json"
-#     with open(final_output_path, 'w', encoding='utf-8') as f:
-#         json.dump(final_output, f, indent=2, ensure_ascii=False)
-    
-#     print(f"\n✅ Final analysis saved to: {final_output_path}")
-
-
-# if __name__ == "__main__":
-#     main()
-
-def get_all_sections_ranked(all_documents, job):
-    """Get all sections from all documents ranked by relevance score"""
-    model = SentenceTransformer("all-MiniLM-L6-v2")
-    query_emb = model.encode(job, convert_to_tensor=True)
+def get_all_sections_ranked(all_documents, persona, job_to_be_done):
+    """Get all sections from all documents ranked by relevance score using combined persona and job_to_be_done as query, with model cached locally."""
+    cache_dir = os.path.join(base_dir, "cache")
+    os.makedirs(cache_dir, exist_ok=True)
+    model = SentenceTransformer("all-MiniLM-L6-v2", cache_folder=cache_dir)
+    query = f"{persona}: {job_to_be_done}"
+    query_emb = model.encode(query, convert_to_tensor=True)
     
     all_sections = []
     
@@ -724,31 +675,33 @@ def get_all_sections_ranked(all_documents, job):
     return all_sections
 
 def main():
-    # extractor = PDFOutlineExtractor()
-    config_path = Path(f"{base_dir}/src/config.json")
-    extractor = PDFOutlineExtractor(config_path)
-    
+    # Ask user for test selection
+    test_num = get_test_selection()
+    base_input_dir = Path(base_dir) / f"input/Collection {test_num}/PDFs"
+    base_output_dir = Path(base_dir) / "output"
+    config_path = Path(base_dir) / f"input/Collection {test_num}/challenge1b_input.json"
+
+    extractor = PDFOutlineExtractor(base_input_dir, base_output_dir, config_path)
+
     persona = extractor.config.get("persona", {}).get("role", "Analyst")
     job_to_be_done = extractor.config.get("job_to_be_done", {}).get("task", "Analyze documents")
-    
+    challenge_id = extractor.config.get("challenge_info", {}).get("challenge_id", f"challenge_{test_num}")
+
     print(f"\n🎯 Persona: {persona}")
     print(f"🎯 Job to be done: {job_to_be_done}")
-    
+
     headings_summary, all_documents, pdf_files = extractor.process_all_pdfs()
 
-    persona = "Travel Planner"
-    job_to_be_done = "Plan a 4 day trip for 10 college students"
-
     # Get all headings with content from all documents
-    all_sections_with_scores = get_all_sections_ranked(all_documents, job_to_be_done)
-    
+    all_sections_with_scores = get_all_sections_ranked(all_documents, persona, job_to_be_done)
+
     # Select top 10 sections across all documents
     top_10_sections = all_sections_with_scores[:10]
-    
+
     print("\n" + "="*80)
     print("TOP 10 MOST RELEVANT SECTIONS:")
     print("="*80)
-    
+
     for i, section in enumerate(top_10_sections, 1):
         print(f"\n{i}. {section['title']} - {section['heading_text']}")
         print(f"   Page: {section['page']} | Relevance Score: {section['relevance_score']}")
@@ -759,6 +712,10 @@ def main():
     title_to_filename = {}
     for i, doc in enumerate(all_documents):
         title_to_filename[doc['title']] = pdf_files[i].name if i < len(pdf_files) else f"document_{i+1}.pdf"
+
+    # Prepare output subfolder for this challenge
+    challenge_output_dir = base_output_dir / challenge_id
+    challenge_output_dir.mkdir(parents=True, exist_ok=True)
 
     # Save final analysis with only top 10 sections
     final_output = {
@@ -785,11 +742,11 @@ def main():
             for section in top_10_sections
         ]
     }
-    
-    final_output_path = extractor.output_dir / "final_output.json"
+
+    final_output_path = challenge_output_dir / "final_output.json"
     with open(final_output_path, 'w', encoding='utf-8') as f:
         json.dump(final_output, f, indent=2, ensure_ascii=False)
-    
+
     print(f"\n✅ Top 10 sections analysis saved to: {final_output_path}")
     print(f"📊 Processed {len(all_documents)} documents with {len(all_sections_with_scores)} total sections")
 
