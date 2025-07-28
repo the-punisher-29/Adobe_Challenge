@@ -14,12 +14,29 @@ base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class PDFOutlineExtractor:
-    def __init__(self):
+    def __init__(self, config_path="config.json"):
+        self.config_path = config_path
+        self.config = self.load_config()
+        
         self.input_dir = Path(f"{base_dir}/1b_input")
         self.output_dir = Path(f"{base_dir}/output")
 
         if not self.output_dir.exists():
             self.output_dir.mkdir(parents=True, exist_ok=True)
+    
+    def load_config(self):
+        """Load configuration from JSON file"""
+        try:
+            with open(self.config_path, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+            print(f"✅ Loaded configuration from {self.config_path}")
+            return config
+        except FileNotFoundError:
+            print(f"❌ Config file {self.config_path} not found!")
+            raise
+        except json.JSONDecodeError as e:
+            print(f"❌ Invalid JSON in config file: {e}")
+            raise
 
     def clean_text(self, text):
         """Clean and normalize text"""
@@ -452,7 +469,7 @@ class PDFOutlineExtractor:
             except Exception as e:
                 print(f"❌ Error processing {pdf_file.name}: {str(e)}")
         
-        return headings_summary, all_documents
+        return headings_summary, all_documents, pdf_files
 
 
 def get_user_inputs() -> Tuple[str, str]:
@@ -707,8 +724,17 @@ def get_all_sections_ranked(all_documents, job):
     return all_sections
 
 def main():
-    extractor = PDFOutlineExtractor()
-    headings_summary, all_documents = extractor.process_all_pdfs()
+    # extractor = PDFOutlineExtractor()
+    config_path = Path(f"{base_dir}/src/config.json")
+    extractor = PDFOutlineExtractor(config_path)
+    
+    persona = extractor.config.get("persona", {}).get("role", "Analyst")
+    job_to_be_done = extractor.config.get("job_to_be_done", {}).get("task", "Analyze documents")
+    
+    print(f"\n🎯 Persona: {persona}")
+    print(f"🎯 Job to be done: {job_to_be_done}")
+    
+    headings_summary, all_documents, pdf_files = extractor.process_all_pdfs()
 
     persona = "Travel Planner"
     job_to_be_done = "Plan a 4 day trip for 10 college students"
@@ -729,17 +755,35 @@ def main():
         print(f"   Content Preview: {section['content'][:200]}...")
         print("-" * 60)
 
+    # Create a mapping from document title to PDF filename for reference
+    title_to_filename = {}
+    for i, doc in enumerate(all_documents):
+        title_to_filename[doc['title']] = pdf_files[i].name if i < len(pdf_files) else f"document_{i+1}.pdf"
+
     # Save final analysis with only top 10 sections
     final_output = {
-        "persona": persona,
-        "job_to_be_done": job_to_be_done,
-        "top_10_sections": top_10_sections,
-        "analysis_summary": {
-            "total_documents_processed": len(all_documents),
-            "total_sections_analyzed": len(all_sections_with_scores),
-            "selection_method": "semantic_similarity_ranking",
-            "top_sections_selected": 10
-        }
+        "metadata": {
+            "input_documents": [str(pdf_file) for pdf_file in pdf_files],  # Convert Path objects to strings
+            "persona": persona,
+            "job_to_be_done": job_to_be_done
+        },
+        "extracted_sections": [
+            {
+                "document": title_to_filename.get(section["title"], section["title"]),
+                "section_title": section["heading_text"],
+                "importance_rank": i + 1,
+                "page_number": section["page"],
+            }
+            for i, section in enumerate(top_10_sections)
+        ],
+        "subsection_analysis": [
+            {
+                "document": title_to_filename.get(section["title"], section["title"]),
+                "refined_text": section["content"],
+                "page_number": section["page"],
+            }
+            for section in top_10_sections
+        ]
     }
     
     final_output_path = extractor.output_dir / "final_output.json"
@@ -748,7 +792,6 @@ def main():
     
     print(f"\n✅ Top 10 sections analysis saved to: {final_output_path}")
     print(f"📊 Processed {len(all_documents)} documents with {len(all_sections_with_scores)} total sections")
-
 
 if __name__ == "__main__":
     main()
