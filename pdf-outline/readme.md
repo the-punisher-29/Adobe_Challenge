@@ -28,12 +28,12 @@ input/
 ---
 
 ## Output Specification
-- For each input PDF, a JSON file is created in the `ioutput/` directory (or `/app/ioutput` in Docker).
+- For each input PDF, a JSON file is created in the `output/` directory (or `/app/output` in Docker).
 - Each output file is named after the input PDF (e.g., `doc1.json` for `doc1.pdf`).
 
 **Example output structure:**
 ```
-ioutput/
+output/
   doc1.json
   doc2.json
   ...
@@ -70,14 +70,14 @@ docker build --platform linux/amd64 -t pdf-outline-extractor:latest .
 
 ### 2. Prepare Input/Output Folders
 - Place your PDFs in an `input/` folder in your working directory.
-- Create an empty `ioutput/` folder (or let Docker create it).
+- Create an empty `output/` folder (or let Docker create it).
 
 ### 3. Run the Solution
 ```sh
-docker run --rm -v $(pwd)/input:/app/input -v $(pwd)/ioutput:/app/ioutput pdf-outline-extractor:latest
+docker run --rm -v $(pwd)/input:/app/input -v $(pwd)/output:/app/output pdf-outline-extractor:latest
 ```
 - On Windows PowerShell, use `${PWD}` instead of `$(pwd)`.
-- The script will process all PDFs in `/app/input` and write JSON outlines to `/app/ioutput`.
+- The script will process all PDFs in `/app/input` and write JSON outlines to `/app/output`.
 
 ---
 

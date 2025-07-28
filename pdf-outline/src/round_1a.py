@@ -10,7 +10,7 @@ base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 class PDFOutlineExtractor:
     def __init__(self):
         self.input_dir = Path(f"{base_dir}/input")
-        self.output_dir = Path(f"{base_dir}/ioutput")
+        self.output_dir = Path(f"{base_dir}/output")
 
         if not self.output_dir.exists():
             self.output_dir.mkdir(parents=True, exist_ok=True)
